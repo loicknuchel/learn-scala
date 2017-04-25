@@ -3,24 +3,23 @@ package exercices
 import support.WorkshopSuite
 
 class e01_syntaxe extends WorkshopSuite {
-  exercice("Déclarer une variable") {
-    // permet de déclarer une valeur (= constante)
-    val constant: String = "abc"
-    //constant = "def" // mais pas une valeur (vérifier puis laisser en commentaire)
-    constant shouldBe __
-
-    // permet de déclarer une variable (à utiliser au minimum)
-    var variable: Int = 5
-    variable = 42 // on peut réassigner une variable
-    //variable = true // le type ne doit pas changer (vérifier puis laisser en commentaire)
-    variable shouldBe __
+  exercice("e1") {
+    "a" shouldBe "a"
   }
 
-  exercice("Déclarer une fonction") {
-    def add(a: Int, b: Int): Int = {
-      return a + b;
+  section("s1") {
+    ignore("e2") {
+      "a" shouldBe __
     }
+    exercice("e3") {
+      "a" shouldBe __
+    }
+    exercice("e4") {
+      "a" shouldBe "a"
+    }
+  }
 
-    add(2, 3) shouldBe __
+  exercice("e5") {
+    "a" shouldBe "a"
   }
 }
