@@ -7,13 +7,24 @@ import org.scalatest.events._
 class CustomReporter(other: Reporter) extends Reporter {
   def apply(event: Event): Unit = {
     event match {
-      case e: TestStarting => println("CustomReporter.apply(TestStarting, " + e.testName + ")")
-      case e: TestSucceeded => println("CustomReporter.apply(TestSucceeded, " + e.testName + ")")
-      case e: TestFailed => println("CustomReporter.apply(TestFailed, " + e.testName + ")"); CustomStopper.requestStop()
-      case e: TestIgnored => println("CustomReporter.apply(TestIgnored, " + e.testName + ")")
-      case e: ScopeOpened => println("CustomReporter.apply(ScopeOpened, " + e.message + ")")
-      case e: ScopeClosed => println("CustomReporter.apply(ScopeClosed, " + e.message + ")")
-      case e: InfoProvided => println("CustomReporter.apply(InfoProvided, " + e.message + ")")
+      case e: TestFailed =>
+        println("CustomReporter.apply(TestFailed, " + e.testName + ")")
+        e.throwable match {
+          case Some(err: MyTestFailedException) =>
+            println(Console.RED+" MyTestFailedException"+Console.RESET)
+          case Some(err: MyTestPendingException) => println("MyTestPendingException")
+          case Some(err: MyNotImplementedException) => println("MyNotImplementedException")
+          case Some(err: MyException) => println("MyException")
+          case _ => println("unexpected error : " + e)
+        }
+        event.ordinal.nextNewOldPair._2.next
+        CustomStopper.requestStop()
+      case e: TestStarting => //println("CustomReporter.apply(TestStarting, " + e.testName + ")")
+      case e: TestSucceeded => //println("CustomReporter.apply(TestSucceeded, " + e.testName + ")")
+      case e: TestIgnored => //println("CustomReporter.apply(TestIgnored, " + e.testName + ")")
+      case e: ScopeOpened => //println("CustomReporter.apply(ScopeOpened, " + e.message + ")")
+      case e: ScopeClosed => //println("CustomReporter.apply(ScopeClosed, " + e.message + ")")
+      case e: InfoProvided => //println("CustomReporter.apply(InfoProvided, " + e.message + ")")
       // useless
       case e: DiscoveryStarting => println("CustomReporter.apply(DiscoveryStarting) => " + e)
       case e: DiscoveryCompleted => println("CustomReporter.apply(DiscoveryCompleted) => " + e)
