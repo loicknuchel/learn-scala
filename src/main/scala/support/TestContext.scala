@@ -3,7 +3,7 @@ package support
 import scala.annotation.switch
 import scala.collection.mutable.ArrayBuffer
 
-class TestContext(code: => String, val startLine: Int, val endLine: Int) {
+class TestContext(code: => String, val startLine: Int, val endLine: Int, val tmp: String) {
   lazy val lines: List[(Int, String)] = TestContext.getLines(code)
 }
 

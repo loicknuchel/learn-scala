@@ -12,6 +12,7 @@ class e01_syntaxe extends WorkshopSuite {
       "a" shouldBe __
     }
     exercice("e3") {
+      val a = ""
       "a" shouldBe __
     }
     exercice("e4") {

@@ -4,19 +4,18 @@ import org.scalatest.Reporter
 import org.scalatest.events._
 
 // see http://doc.scalatest.org/3.0.0/index.html#org.scalatest.Reporter
-class CustomReporter(other: Reporter) extends Reporter {
+class CustomReporter(reporter: Reporter) extends Reporter {
   def apply(event: Event): Unit = {
     event match {
       case e: TestFailed =>
-        println("CustomReporter.apply(TestFailed, " + e.testName + ")")
-        e.throwable match {
-          case Some(err: MyTestFailedException) =>
-            println(Console.RED+" MyTestFailedException"+Console.RESET)
-          case Some(err: MyTestPendingException) => println("MyTestPendingException")
-          case Some(err: MyNotImplementedException) => println("MyNotImplementedException")
-          case Some(err: MyException) => println("MyException")
-          case _ => println("unexpected error : " + e)
+        val message = e.throwable match {
+          case Some(err: MyTestPendingException) => Formatter.formatError(err, e.suiteName, e.testName)
+          case Some(err: MyNotImplementedException) => Formatter.formatError(err, e.suiteName, e.testName)
+          case Some(err: MyTestFailedException) => Formatter.formatError(err, e.suiteName, e.testName)
+          case Some(err: MyException) => Formatter.formatError(err, e.suiteName, e.testName)
+          case _ => "unexpected error : " + e
         }
+        println("\n" + message + "\n")
         event.ordinal.nextNewOldPair._2.next
         CustomStopper.requestStop()
       case e: TestStarting => //println("CustomReporter.apply(TestStarting, " + e.testName + ")")

@@ -2,7 +2,7 @@ package support
 
 import org.scalatest.exceptions.{TestFailedException, TestPendingException}
 
-class MyException(val fileName: Option[String], val ctx: TestContext, val errors: Option[List[Int]], val message: Option[String], val cause: Throwable) extends Exception(message.getOrElse(""), cause) {}
+sealed class MyException(val fileName: Option[String], val ctx: TestContext, val errors: Option[List[Int]], val message: Option[String], val cause: Throwable) extends Exception(message.getOrElse(""), cause) {}
 class MyNotImplementedException(fileName: Option[String], ctx: TestContext, errors: Option[List[Int]], message: Option[String], cause: Throwable) extends MyException(fileName, ctx, errors, message, cause) {}
 class MyTestPendingException(fileName: Option[String], ctx: TestContext, errors: Option[List[Int]], message: Option[String], cause: Throwable) extends MyException(fileName, ctx, errors, message, cause) {}
 class MyTestFailedException(fileName: Option[String], ctx: TestContext, errors: Option[List[Int]], message: Option[String], cause: Throwable) extends MyException(fileName, ctx, errors, message, cause) {}
@@ -15,7 +15,7 @@ object CustomExceptions {
   }
 
   def pending(suite: WorkshopSuite, ctx: TestContext, e: TestPendingException): MyTestPendingException = {
-    val stack = e.getStackTrace()(2)
+    val stack = e.getStackTrace()(3)
     val location = getLocation(suite, stack)
     val errors = List(stack.getLineNumber)
     new MyTestPendingException(Some(location), ctx, Some(errors), Some(Formatter.missingValue), e)
